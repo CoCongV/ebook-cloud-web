@@ -1,17 +1,18 @@
 <template>
-    <a-pagination v-model="current" :total="count" pageSize="20" @change="onChange"/>
+    <div>
+        <a-pagination v-model="current" :total="count" pageSize="20" @change="onChange" style="display: inline"/>
+    </div>
 </template>
 
 <script>
 export default {
-    props: ['count', 'current'],
+    props: ["count", "current"],
     data() {
-        return {
-        };
+        return {};
     },
     methods: {
         onChange(pageNum) {
-            this.$emit("onChange", pageNum)
+            this.$emit("onChange", pageNum);
         }
     }
 };

@@ -26,7 +26,7 @@
                     </a-col>
                 </a-row>
             </a-layout-content>
-            <a-layout-footer>
+            <a-layout-footer style="display: flex;justify-content:center;">
                 <Pagination :count="count" :current="page" @onChange="changePage"></Pagination>
             </a-layout-footer>
         </a-layout>
@@ -67,7 +67,7 @@ export default {
         },
         changePage(page) {
             this.page = page;
-            this.getBooks()
+            this.getBooks();
         },
         getBooks() {
             this.axios
