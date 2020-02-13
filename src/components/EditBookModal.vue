@@ -1,6 +1,7 @@
 <template>
   <div>
-    <a-button type="primary" @click="showModal">Open Modal with async logic</a-button>
+    <!-- <a-button type="primary" @click="showModal">Open Modal with async logic</a-button> -->
+    <a-icon type="edit" @click="showModal"></a-icon>
     <a-modal
       title="Title"
       :visible="visible"
@@ -8,7 +9,15 @@
       :confirmLoading="confirmLoading"
       @cancel="handleCancel"
     >
-      <p>{{ModalText}}</p>
+    <a-form>
+      <a-form-item label="name">
+          <a-input></a-input>
+      </a-form-item>
+    </a-form>
+    <template slot="footer">
+        <a-button key="back" @click="handleCancel">关闭</a-button>
+        <a-button key="submit" @click="handleOk" type="primary">提交</a-button>
+    </template>
     </a-modal>
   </div>
 </template>
@@ -16,17 +25,15 @@
   export default {
     data() {
       return {
-        ModalText: 'Content of the modal',
         visible: false,
         confirmLoading: false,
       };
     },
     methods: {
-      showModal() {
-        this.visible = true;
-      },
+        showModal() {
+            this.visible = true;
+        },
       handleOk(_) {
-        this.ModalText = 'The modal will be closed after two seconds';
         this.confirmLoading = true;
         setTimeout(() => {
           this.visible = false;

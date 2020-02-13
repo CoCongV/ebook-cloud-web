@@ -1,10 +1,22 @@
 <template>
     <a-layout class="home">
-        <a-layout-sider collapsible v-model="collapsed" :trigger="null" class="sider" :theme="theme">
+        <a-layout-sider
+            collapsible
+            v-model="collapsed"
+            :trigger="null"
+            class="sider"
+            :theme="theme"
+        >
             <SlideBar :theme="theme"></SlideBar>
         </a-layout-sider>
-        <a-layout :class="collapsed ? 'main-content-slider-off' : 'main-content-slider-on'" key="layout">
-            <a-layout-header key="layout-header" :class="this.theme == 'light' ? 'header-light' : 'header-dark'">
+        <a-layout
+            :class="collapsed ? 'main-content-slider-off' : 'main-content-slider-on'"
+            key="layout"
+        >
+            <a-layout-header
+                key="layout-header"
+                :class="this.theme == 'light' ? 'header-light' : 'header-dark'"
+            >
                 <Header @Triger="Trigger" @changeTheme="changeTheme" key="header"></Header>
             </a-layout-header>
             <a-layout-content key="content" class="content">
@@ -14,6 +26,9 @@
                     </a-col>
                 </a-row>
             </a-layout-content>
+            <a-layout-footer>
+                <Pagination :count="count" :current="page" @onChange="changePage"></Pagination>
+            </a-layout-footer>
         </a-layout>
     </a-layout>
 </template>
@@ -22,13 +37,15 @@
 import SlideBar from "@/components/SlideBar.vue";
 import Header from "@/components/Header.vue";
 import BookCard from "@/components/BookCard.vue";
+import Pagination from "@/components/Pagination.vue";
 import { api } from "@/util/api";
 
 export default {
     components: {
         SlideBar,
         Header,
-        BookCard
+        BookCard,
+        Pagination
     },
     data() {
         return {
@@ -36,7 +53,9 @@ export default {
             theme: "light",
             books: [],
             prev: false,
-            next: false
+            next: false,
+            count: 0,
+            page: 1
         };
     },
     methods: {
@@ -44,17 +63,32 @@ export default {
             this.collapsed = collapsed;
         },
         changeTheme(theme) {
-            this.theme = theme
+            this.theme = theme;
+        },
+        changePage(page) {
+            this.page = page;
+            this.getBooks()
+        },
+        getBooks() {
+            this.axios
+                .get(api.books, {
+                    params: {
+                        page: this.page
+                    }
+                })
+                .then(response => {
+                    this.books = response.data.books;
+                    this.prev = response.data.prev;
+                    this.next = response.data.next;
+                    this.count = response.data.count;
+                });
         }
     },
     mounted() {
-        this.theme = localStorage.getItem("theme")
-        this.collapsed = localStorage.getItem("collapsed") == 'true' ? true : false
-        this.axios.get(api.books).then(response => {
-            this.books = response.data.books;
-            this.prev = response.data.prev;
-            this.next = response.next;
-        });
+        this.theme = localStorage.getItem("theme");
+        this.collapsed =
+            localStorage.getItem("collapsed") == "true" ? true : false;
+        this.getBooks();
     }
 };
 </script>
