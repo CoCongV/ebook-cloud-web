@@ -4,7 +4,7 @@
             <SlideBar :theme="theme"></SlideBar>
         </a-layout-sider>
         <a-layout :class="collapsed ? 'main-content-slider-off' : 'main-content-slider-on'" key="layout">
-            <a-layout-header key="layout-header" class="header">
+            <a-layout-header key="layout-header" :class="this.theme == 'light' ? 'header-light' : 'header-dark'">
                 <Header @Triger="Trigger" @changeTheme="changeTheme" key="header"></Header>
             </a-layout-header>
             <a-layout-content key="content" class="content">
@@ -48,6 +48,8 @@ export default {
         }
     },
     mounted() {
+        this.theme = localStorage.getItem("theme")
+        this.collapsed = localStorage.getItem("collapsed") == 'true' ? true : false
         this.axios.get(api.books).then(response => {
             this.books = response.data.books;
             this.prev = response.data.prev;
@@ -78,9 +80,15 @@ export default {
     min-height: 280px;
     background: #fff;
 }
-.header {
+.header-light {
     background: #fff !important;
     padding: 0px !important;
+    height: 66px !important;
+}
+.header-dark {
+    background: #001529 !important;
+    padding: 0px !important;
+    height: 66px !important;
 }
 .book-col {
     margin-bottom: 8px;

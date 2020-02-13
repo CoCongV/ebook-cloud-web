@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="logo" />
-        <a-menu :theme="theme" mode="inline" :defaultSelectedKeys="['1']">
+        <a-menu :theme="theme" mode="inline" :defaultSelectedKeys="['1']" class="sider-menu">
             <a-menu-item key="1">
                 <a-icon type="home" />
                 <span>主页</span>
@@ -37,10 +37,13 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .logo {
     height: 32px;
     background: rgba(255, 255, 255, 0.2);
     margin: 16px;
+}
+.sider-menu {
+    border-right: 0px !important;
 }
 </style>
