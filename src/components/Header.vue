@@ -1,12 +1,13 @@
 <template>
     <div>
         <a-icon
-          class="trigger"
+          :class="this.checked ? 'trigger-dark' : 'trigger'"
           :type="collapsed ? 'menu-unfold' : 'menu-fold'"
           @click="Triger"
         />
         <a-switch
             defaultChecked
+            :checked="checked"
             @change="changeTheme"
             checkedChildren="dark"
             unCheckedChildren="light"
@@ -19,19 +20,26 @@ export default {
     data() {
         return {
             collapsed: false,
-            light: true
+            checked: false
         }
     },
     methods: {
         Triger() {
             this.collapsed = !this.collapsed
             this.$emit("Triger", this.collapsed)
+            localStorage.setItem("collapsed", this.collapsed)
         },
         changeTheme(checked) {
-            this.light = checked ? false : true
             let theme = checked ? "dark" : "light"
+            this.checked = checked
             this.$emit("changeTheme", theme)
+            localStorage.setItem("theme", theme)
         }
+    },
+    mounted() {
+        console.log(localStorage.getItem("theme"))
+        this.checked = localStorage.getItem("theme") == 'dark' ? true : false
+        this.collapsed = localStorage.getItem("collapsed") =='true' ? true : false
     }
 }
 </script>
@@ -39,12 +47,20 @@ export default {
 <style scoped>
 .trigger {
     font-size: 18px;
-    line-height: 64px;
+    line-height: 66px;
     padding: 0 24px;
     cursor: pointer;
     transition: color 0.3s;
   }
 .trigger:hover {
     color: #1890ff;
+}
+.trigger-dark {
+    font-size: 18px;
+    line-height: 66px;
+    padding: 0 24px;
+    cursor: pointer;
+    transition: color 0.3s;
+    color: #fff;
 }
 </style>
